@@ -33,6 +33,7 @@ class Movie(db.Model):
 # Create the database tables (run this only once after model)
 # with app.app_context():
 #     db.create_all()
+
 def check_logged_in_user():
     return User.query.filter_by(logged_in=True).first()
 def logout():
@@ -55,7 +56,6 @@ def signup():
     logged_in = check_logged_in_user()
     if logged_in:
         logout()
-
     if request.method=="POST":
         name=request.form.get("username")
         password= request.form.get("password")
@@ -106,7 +106,30 @@ def home():
     return render_template("home.html")
 
 
+@app.route("/add",methods=["GET","POST"])
+def add():
+    logged_in = check_logged_in_user()
+    user = User.query.filter_by(logged_in=True).first()  # find the user (who is currently using)
+    print("test")
+    if logged_in:
+        if request.method == "POST":
+            m_name = request.form.get("m_name")
+            m_review = request.form.get("m_review")
+            m_rating = request.form.get("m_rating")
+            m_genre = request.form.get("m_genre")
+            m_img = request.form.get("m_img")
+            new_movie = Movie(name=m_name, rating=float(m_rating),image_url=m_img,review=m_review,genre=m_genre, user_id=user.id,status="Watched")
+            db.session.add(new_movie)
+            db.session.commit()
+            print("Added a movie")
+        return render_template("add.html")
+    else:
+        return redirect(url_for('login'))  # If not logged in, redirect to login page
 
+## home page ma wacthed ko lera aaune
+##EDIT
+##Wishlist
+## wishlist lai watched ma convert garne
 
 
 if __name__ == "__main__":
