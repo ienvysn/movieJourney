@@ -92,13 +92,17 @@ def login():
     return render_template("login.html")
 
 
+
+
+
+##WACTHED
 @app.route("/home",methods=["GET","POST"])
 def home():
     logged_in = check_logged_in_user()
     if not logged_in:
         return redirect(url_for('login'))
     user = User.query.filter_by(logged_in=True).first()
-    movies = Movie.query.filter_by(user_id=user.id).all()
+    movies = Movie.query.filter_by(user_id=user.id, status='Watched').all()
 
     #logout
     if request.method=="POST":
@@ -109,11 +113,11 @@ def home():
                 db.session.commit()
             return redirect(url_for('login'))
 
-    return render_template("home.html",movies=movies)
+    return render_template("home.html",movies=movies,source="watched")
 
-
-@app.route("/add",methods=["GET","POST"])
-def add():
+#ADD WACTHED MOVIE
+@app.route("/m_add",methods=["GET","POST"])
+def m_add():
     logged_in = check_logged_in_user()
     user = User.query.filter_by(logged_in=True).first()  # find the user (who is currently using)
     print("test")
@@ -128,13 +132,62 @@ def add():
             db.session.add(new_movie)
             db.session.commit()
             print("Added a movie")
-        user = User.query.filter_by(logged_in=True).first()
-        movies = Movie.query.filter_by(user_id=user.id).all()
-        return render_template("add.html",movies=movies)
+            user = User.query.filter_by(logged_in=True).first()
+            movies = Movie.query.filter_by(user_id=user.id, status='Watched').all()
+            return render_template("home.html",movies=movies)##redirects After adding
+        return render_template('add.html')
     else:
         return redirect(url_for('login'))  # If not logged in, redirect to login page
 
 
+
+
+
+
+##Wishlist
+@app.route("/wishlist",methods=["GET","POST"])
+def wishlist():
+    logged_in = check_logged_in_user()
+    if not logged_in:
+        return redirect(url_for('login'))
+    user = User.query.filter_by(logged_in=True).first()
+    movies = Movie.query.filter_by(user_id=user.id, status='Wishlist').all()
+
+
+    #logout
+    if request.method=="POST":
+        # if 'logout' in request.form:
+            user = User.query.filter_by(logged_in=True).first() #find the user (who is currently using)
+            if user:
+                user.logged_in = False  #Logout the user
+                db.session.commit()
+            return redirect(url_for('login'))
+
+    return render_template("home.html",movies=movies,source="wishlist")
+
+## WIHLIST ADD
+@app.route("/w_add",methods=["GET","POST"])
+def w_add():
+    logged_in = check_logged_in_user()
+    user = User.query.filter_by(logged_in=True).first()  # find the user (who is currently using)
+    if logged_in:
+        if request.method == "POST":
+            m_name = request.form.get("m_name")
+            m_review = request.form.get("m_review")
+            m_rating = request.form.get("m_rating")
+            m_genre = request.form.get("m_genre")
+            m_img = request.form.get("m_img")
+            new_movie = Movie(name=m_name, rating=float(m_rating),image_url=m_img,review=m_review,genre=m_genre, user_id=user.id,status="Wishlist")
+            db.session.add(new_movie)
+            db.session.commit()
+            movies = Movie.query.filter_by(user_id=user.id, status='Wishlist').all()
+            return render_template("home.html",movies=movies) ##redirects After adding
+        return render_template('add.html', movies=movies)
+    else:
+        return redirect(url_for('login'))  # If not logged in, redirect to login page
+
+
+#DELETE FOR BOTH
 @app.route('/delete_movie/<int:movie_id>', methods=['POST'])
 def delete_movie(movie_id):
     movie = Movie.query.get(movie_id)
@@ -144,12 +197,10 @@ def delete_movie(movie_id):
         db.session.commit()
         user = User.query.filter_by(logged_in=True).first()
         movies = Movie.query.filter_by(user_id=user.id).all()
-        return redirect(url_for('home'),movies=movies)  # Redirect to home after deletion
-
-##EDIT
-##Wishlist
-## wishlist lai watched ma convert garne
-
+        source = request.form.get('source')
+        if source == 'wishlist':
+            return redirect(url_for('wishlist'))
+        return redirect(url_for('home'))
 
 if __name__ == "__main__":
     app.run(debug=True)
