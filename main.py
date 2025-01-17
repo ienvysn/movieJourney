@@ -80,12 +80,13 @@ def login():
         password = request.form.get("password")
         #find the user
         user = User.query.filter_by(username=name).first()
-
+        print(user,password)
      # check if the username and password match
         if user and user.password == password:
+            print("correct password")
             user.logged_in = True
             db.session.commit()
-            return redirect(url_for('home'))  # Redirect to home.html page (or dashboard)
+            return redirect(url_for('home'))  # Redirect to home.html page
         else:
             return render_template("login.html", error="Incoorect Credentials.")
     return render_template("login.html")
@@ -96,14 +97,19 @@ def home():
     logged_in = check_logged_in_user()
     if not logged_in:
         return redirect(url_for('login'))
+    user = User.query.filter_by(logged_in=True).first()
+    movies = Movie.query.filter_by(user_id=user.id).all()
 
+    #logout
     if request.method=="POST":
-        user = User.query.filter_by(logged_in=True).first() #find the user (who is currently using)
-        if user:
-            user.logged_in = False  #Logout the user
-            db.session.commit()
-        return render_template("signup.html")
-    return render_template("home.html")
+        # if 'logout' in request.form:
+            user = User.query.filter_by(logged_in=True).first() #find the user (who is currently using)
+            if user:
+                user.logged_in = False  #Logout the user
+                db.session.commit()
+            return redirect(url_for('login'))
+
+    return render_template("home.html",movies=movies)
 
 
 @app.route("/add",methods=["GET","POST"])
@@ -122,11 +128,24 @@ def add():
             db.session.add(new_movie)
             db.session.commit()
             print("Added a movie")
-        return render_template("add.html")
+        user = User.query.filter_by(logged_in=True).first()
+        movies = Movie.query.filter_by(user_id=user.id).all()
+        return render_template("add.html",movies=movies)
     else:
         return redirect(url_for('login'))  # If not logged in, redirect to login page
 
-## home page ma wacthed ko lera aaune
+
+@app.route('/delete_movie/<int:movie_id>', methods=['POST'])
+def delete_movie(movie_id):
+    movie = Movie.query.get(movie_id)
+
+    if movie:
+        db.session.delete(movie)
+        db.session.commit()
+        user = User.query.filter_by(logged_in=True).first()
+        movies = Movie.query.filter_by(user_id=user.id).all()
+        return redirect(url_for('home'),movies=movies)  # Redirect to home after deletion
+
 ##EDIT
 ##Wishlist
 ## wishlist lai watched ma convert garne
