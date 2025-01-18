@@ -104,10 +104,7 @@
           <img src="{{ movie.img_url }}">
           <h3>{{ movie.name }}</h3>
 
-           <form action="{{ url_for('delete_movie', movie_id=movie.id) }}" method="POST">  <!-- redirects to @delete in main.py -->
-             <input type="hidden" name="source" value="{{ source }}"> <!-- Stores data that is not visible to the user (sent from main.py)-->
-            <button type="submit" class="delete-button">Delete</button>
-          </form>
+
         </div>
       {% endif %}
     {% else %}
@@ -123,6 +120,20 @@
     <h2 id="movieTitle"></h2>
     <img id="movieImage" src="" alt="">
     <p id="movieDescription"></p>
+
+    <!-- deleting from js -->
+   <form id="deleteForm" method="POST">
+      <input type="hidden" name="source" value="{{ source }}">
+      <button type="submit" class="delete-button">Delete</button>
+    </form>
+
+<!-- completed button (ONLY FOR /WISHLIST)-->
+    {% if source == "wishlist" %}
+    <form id="completedForm"  method="POST">
+      <input type="hidden" name="source" value="{{ source }}">
+      <button type="submit" class="completed-button">Completed</button>
+    </form>
+    {% endif %}
   </div>
 </div>
 
@@ -135,22 +146,41 @@
   const closeModalButton = document.querySelector(".close");
 
   // Add event listeners to movie cards
-  document.querySelectorAll(".movie-card").forEach(card => {
-    card.addEventListener("click", () => {
-      // Get movie details from data attributes
-      const name = card.getAttribute("data-name");
-      const review = card.getAttribute("data-review");
-      const image = card.getAttribute("data-img");
+document.querySelectorAll(".movie-card").forEach(card => {
+  card.addEventListener("click", () => {
+    // Get movie details from data attributes
+    console.log("Movie card clicked");
+    const m_id = card.getAttribute("data-movie-id");
+    const name = card.getAttribute("data-name");
+    const review = card.getAttribute("data-review");
+    const image = card.getAttribute("data-img");
 
-      // Set modal content
-      modalTitle.textContent = name;
-      modalImage.src = image;
-      modalDescription.textContent = review;
+    // Set modal content
+    const modalTitle = document.getElementById("movieTitle");
+    const modalImage = document.getElementById("movieImage");
+    const modalDescription = document.getElementById("movieDescription");
+    const deleteForm = document.getElementById("deleteForm");
 
-      // Show modal
-      modal.style.display = "flex";
-    });
+
+    modalTitle.textContent = name;
+    modalImage.src = image;
+    modalDescription.textContent = review;
+
+
+
+
+    // Show modal
+    const modal = document.getElementById("movieModal");
+    modal.style.display = "flex";
+
+     // Set delete form action dynamically
+    deleteForm.action = `/delete_movie/${m_id}`;
+
+    // Chnage wishlist to wtched
+     const completedForm = document.getElementById("completedForm");
+     completedForm.action = `/completed/${m_id}`;
   });
+});
 
   // Close modal when clicking the close button
   closeModalButton.addEventListener("click", () => {
