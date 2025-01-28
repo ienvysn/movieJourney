@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import bcrypt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'idksecretkeyorsm'
@@ -62,7 +63,9 @@ def signup():
         user = User.query.filter_by(username=name).first()
         if user:
             return render_template("signup.html", error="Username already taken.")
-        new_user = User(username=name,password=password,logged_in=True)
+
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        new_user = User(username=name,password=hashed_password.decode("utf-8"),logged_in=True)
         db.session.add(new_user) # add the user to the session and commit it to the database
         db.session.commit()
         return redirect(url_for('home'))
@@ -82,7 +85,7 @@ def login():
         user = User.query.filter_by(username=name).first()
         print(user,password)
      # check if the username and password match
-        if user and user.password == password:
+        if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
             print("correct password")
             user.logged_in = True
             db.session.commit()
