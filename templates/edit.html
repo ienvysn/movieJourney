@@ -1,15 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{{ url_for('static', filename='css/edit.css') }}" rel="stylesheet">
 
+</head>
 <body>
-<body bgcolor="white">
-<h1> EDIT movies</h1>
+    <header>
+<h1> Edit Movies</h1>
+</header>
+<main>
+
+{% if source == "watched" %}
 <form method="post">
-    <input type="text" name="m_name" > Movie name
-    <input type="text" name="m_rating"> Rating
-    <input type="text" name="m_review"> Review
-    <input type="text" name="m_img"> Img
-    <input type="text" name="m_genre"> genre
-    <input type="submit">
+    <div class="input-form">
+    <input type="text" name="m_name" value="{{movie.name}}" > 
+    <label>Movie name</label>
+</div>
+<div class="input-form">
+    <input type="text" name="m_rating" value="{{movie.rating}}">
+    <label> Rating</label> 
+</div>
+<div class="input-form">
+    <input type="text" name="m_review" value="{{movie.review}}"> 
+    <label>Review</label>
+</div>
+<div class="input-form">
+    <input type="text" name="m_genre" value="{{movie.Genre}}"> 
+    <label>Genre</label>
+</div>
+<div class="input-form">
+    <input type="text" name="m_img" value="{{movie.image_url}}"> 
+    <label>Url for image</label>
+</div>
+<button type="submit">Edit</button>
 </form>
+{{%endif%}}
 
+{% if source == "wishlist" %}
+<form method="post">
+    <div class="input-form">
+    <input type="text" name="m_name" value="{{movie.name}}" > 
+    <label>Movie name</label>
+
+    <div class="input-form">
+        <input type="text" name="m_genre" value="{{movie.Genre}}"> 
+        <label>Genre</label>
+    </div>
+    <div class="input-form">
+        <input type="text" name="m_img" value="{{movie.image_url}}"> 
+        <label>Url for image</label>
+        </div>
+        </div>
+    </form>
+        {{%endif%}}
+</main>
 </body>
-
+</html>

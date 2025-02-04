@@ -1,17 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{{ url_for('static', filename='css/signup.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<body bgcolor="white">
-    <h2>Sign Up</h2>
-    <form method="POST">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required><br><br>
-            {% if error %}
+
+</head>
+<body>
+    <form method="post">
+    <div class="container">
+
+        <div class="page1">
+            <h2>Sign-up account</h2>
+            <div class="input-form">
+            <input type="text" name="username" id="username" required>
+            <label>Username</label> <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="input-form">
+            <input type="password" name="password" id="password" required>
+            <label>Password</label> <i class="fa-solid fa-lock"></i>
+        </div>
+        {% if error %}
                 <p style="color: red;">{{ error }}</p>
             {% endif %}
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required><br><br>
 
-        <input type="submit" value="Sign Up">
+            <p> already have an account?
+             <a href="{{url_for('login')}}">log-in</a>
+             </p>
+   
+             <div class="button">
+                <button onclick=""><h4>Submit</h4></button>
+             </div>
+             
+         </div>
+         <div class="blocker">
+            <div class="content">
+          
+            </div>
+        </div>
     </form>
-
-    <p>Already have an account? <a href="{{ url_for('login') }}">Log in here</a></p>
 </body>
+</html>

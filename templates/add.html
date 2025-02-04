@@ -1,14 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{{ url_for('static', filename='css/add.css') }}" rel="stylesheet">
 
-<body bgcolor="white">
-<h1> Add movies</h1>
+</head>
+<body>
+    <header>
+<h1> Add Movies</h1>
+</header>
+<main>
 <form method="post">
-    <input type="text" name="m_name" required> Movie name
-    <input type="text" name="m_rating"> Rating
-    <input type="text" name="m_review"> Review
-    <input type="text" name="m_img"> Img
-    <input type="text" name="m_genre"> genre
-    <input type="submit">
+    <div class="input-form">
+    <input type="text" name="m_name" required>
+    <label>Movie name</label>
+</div>
+<div class="input-form">
+    <input type="text" name="m_rating">
+    <label> Rating</label>
+</div>
+<div class="input-form">
+    <input type="text" name="m_review"> <label>Review</label>
+</div>
+<div class="input-form">
+    <input type="text" name="m_genre"> <label>Genre</label>
+</div>
+<div class="input-form">
+    <input type="text" name="m_img"> <label>Url for image</label>
+</div>
+<button type="submit">add</button>
 </form>
-
+</main>
 </body>
 </html>

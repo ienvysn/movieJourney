@@ -64,6 +64,7 @@ def signup():
         if user:
             return render_template("signup.html", error="Username already taken.")
 
+        #Hash the password
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         new_user = User(username=name,password=hashed_password.decode("utf-8"),logged_in=True)
         db.session.add(new_user) # add the user to the session and commit it to the database
@@ -83,10 +84,10 @@ def login():
         password = request.form.get("password")
         #find the user
         user = User.query.filter_by(username=name).first()
-        print(user,password)
+
      # check if the username and password match
         if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
-            print("correct password")
+
             user.logged_in = True
             db.session.commit()
             return redirect(url_for('home'))  # Redirect to home.html page
@@ -95,35 +96,39 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/home")
+def home():
+    logged_in = check_logged_in_user()
+    if logged_in:
+        return render_template("home.html")
+    else:
+        return redirect(url_for("login"))
+@app.route("/logout")
+def log_out():
+        logged_in=check_logged_in_user()
 
-
+        if logged_in:
+            logout()
+        return redirect(url_for('login'))
 
 ##WACTHED
-@app.route("/home",methods=["GET","POST"])
-def home():
+@app.route("/watched",methods=["GET","POST"])
+def watchlist():
+    print("tyest")
     logged_in = check_logged_in_user()
     if not logged_in:
         return redirect(url_for('login'))
     user = User.query.filter_by(logged_in=True).first()
 
-    #logout
-    if request.method=="POST":
-        # if 'logout' in request.form:
-            user = User.query.filter_by(logged_in=True).first() #find the user (who is currently using)
-            if user:
-                user.logged_in = False  #Logout the user
-                db.session.commit()
-            return redirect(url_for('login'))
-
     movies = Movie.query.filter_by(user_id=user.id, status='Watched').all()
-    return render_template("home.html",movies=movies,source="watched")
+    return render_template("watched.html",movies=movies,source="watched")
 
 #ADD WACTHED MOVIE
-@app.route("/home/add",methods=["GET","POST"])
+@app.route("/watched/add",methods=["GET","POST"])
 def m_add():
     logged_in = check_logged_in_user()
     user = User.query.filter_by(logged_in=True).first()  # find the user (who is currently using)
-    print("test")
+
     if logged_in:
         if request.method == "POST":
             m_name = request.form.get("m_name")
@@ -134,15 +139,11 @@ def m_add():
             new_movie = Movie(name=m_name, rating=float(m_rating),image_url=m_img,review=m_review,genre=m_genre, user_id=user.id,status="Watched")
             db.session.add(new_movie)
             db.session.commit()
-            print("Added a movie")
 
-            return redirect(url_for('home'))
-        return render_template('add.html')
+            return redirect(url_for("watchlist"))
+        return render_template('add.html',source="watched")
     else:
         return redirect(url_for('login'))  # If not logged in, redirect to login page
-
-
-
 
 
 
@@ -154,18 +155,7 @@ def wishlist():
         return redirect(url_for('login'))
     user = User.query.filter_by(logged_in=True).first()
     movies = Movie.query.filter_by(user_id=user.id, status='Wishlist').all()
-
-
-    #logout
-    if request.method=="POST":
-        # if 'logout' in request.form:
-            user = User.query.filter_by(logged_in=True).first() #find the user (who is currently using)
-            if user:
-                user.logged_in = False  #Logout the user
-                db.session.commit()
-            return redirect(url_for('login'))
-
-    return render_template("home.html",movies=movies,source="wishlist")
+    return render_template("wishlist.html",movies=movies,source="wishlist")
 
 ## WIHLIST ADD
 @app.route("/wishlist/add",methods=["GET","POST"])
@@ -184,7 +174,7 @@ def w_add():
             db.session.add(new_movie)
             db.session.commit()
             return redirect(url_for('wishlist')) ##redirects After adding
-        return render_template('add.html', movies=movies)
+        return render_template('add.html', movies=movies,source="wishlist")
     else:
         return redirect(url_for('login'))  # If not logged in, redirect to login page
 
@@ -203,7 +193,7 @@ def delete_movie(m_id):
             source = request.form.get('source') #kun bata aako ho (/home or /wishlist)
             if source == 'wishlist':
                 return redirect(url_for('wishlist')) #wishslit delete garyo bhane wishlist mai redirect
-            return redirect(url_for('home'))
+            return redirect(url_for('watchlist'))
     else:
         return redirect(url_for('login'))
 
@@ -218,6 +208,7 @@ def completed(m_id):
             return redirect(url_for('wishlist'))
     else:
         return redirect(url_for('login'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
