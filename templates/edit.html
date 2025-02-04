@@ -13,7 +13,6 @@
 </header>
 <main>
 
-{% if source == "watched" %}
 <form method="post">
     <div class="input-form">
     <input type="text" name="m_name" value="{{movie.name}}" > 
@@ -37,25 +36,9 @@
 </div>
 <button type="submit">Edit</button>
 </form>
-{{%endif%}}
 
-{% if source == "wishlist" %}
-<form method="post">
-    <div class="input-form">
-    <input type="text" name="m_name" value="{{movie.name}}" > 
-    <label>Movie name</label>
 
-    <div class="input-form">
-        <input type="text" name="m_genre" value="{{movie.Genre}}"> 
-        <label>Genre</label>
-    </div>
-    <div class="input-form">
-        <input type="text" name="m_img" value="{{movie.image_url}}"> 
-        <label>Url for image</label>
-        </div>
-        </div>
-    </form>
-        {{%endif%}}
+
 </main>
 </body>
 </html>

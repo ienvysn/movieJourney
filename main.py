@@ -209,6 +209,25 @@ def completed(m_id):
     else:
         return redirect(url_for('login'))
 
+@app.route('/edit/<int:m_id>',methods=["GET","POST"])
+def edit(m_id):
+    logged_in= check_logged_in_user()
 
+    if logged_in:
+        movie = Movie.query.get(m_id)
+        print(movie)
+        print(movie.name)
+        if movie:
+          if request.method == 'POST':
+            movie.name = request.form.get("m_name")
+            movie.review = request.form.get("m_review")
+            movie.rating = request.form.get("m_rating")
+            movie.genre = request.form.get("m_genre")
+            movie.image_url = request.form.get("m_img")
+            db.session.commit()
+            return redirect(url_for("watchlist"))
+        return render_template('edit.html',movie=movie,source="wishlist")
+    else:
+     return redirect(url_for('login'))
 if __name__ == "__main__":
     app.run(debug=True)

@@ -39,11 +39,12 @@
              <div class="img">
           <img src="{{ movie.image_url }}">
              </div>
-          <p>{{ movie.name }}<p>
+          <p>{{ movie.name }}</p>
         </div>
 
       {% endif %}
     {% else %}
+      <h1 color="red" font-size="60px"> ADD MOVIES </h1>
     {% endfor %}
   </div>
 

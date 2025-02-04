@@ -9,7 +9,13 @@
 </head>
 <body>
     <header>
-<h1> Add Movies</h1>
+        {%if source== "wishlist"%}
+            <h1> Add to Wishlist</h1>
+        {% endif %}
+
+        {% if source== "watched"%}
+            <h1>Add Movies</h1>
+        {%endif%}
 </header>
 <main>
 <form method="post">
@@ -30,7 +36,7 @@
 <div class="input-form">
     <input type="text" name="m_img"> <label>Url for image</label>
 </div>
-<button type="submit">add</button>
+<button type="submit">Add</button>
 </form>
 </main>
 </body>
