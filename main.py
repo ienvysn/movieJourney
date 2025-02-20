@@ -10,7 +10,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movieJourney.db"
 # Initialize the database
 db = SQLAlchemy(app)
 
-#new changes 
+
 # User Model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
