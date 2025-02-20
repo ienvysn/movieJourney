@@ -8,7 +8,7 @@ app.config['SECRET_KEY'] = 'idksecretkeyorsm'
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movieJourney.db"
 
 # Initialize the database
-db = SQLAlchemy(app)
+db = SQLAlchemy(app) ffs
 
 # User Model
 class User(db.Model):
