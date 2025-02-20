@@ -230,5 +230,10 @@ def edit(m_id):
         return render_template('edit.html',movie=movie,source="wishlist")
     else:
      return redirect(url_for('login'))
+
+@app.route('/<path:unknown_path>', methods=["GET", "POST"])
+def catch_all(unknown_path):
+    return render_template("error.html"), 404
+
 if __name__ == "__main__":
     app.run(debug=True)
