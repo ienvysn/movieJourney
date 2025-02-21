@@ -137,7 +137,8 @@ def m_add():
             m_rating = request.form.get("m_rating")
             m_genre = request.form.get("m_genre")
             m_img = request.form.get("m_img")
-            new_movie = Movie(name=m_name, rating=float(m_rating),image_url=m_img,review=m_review,genre=m_genre, user_id=user.id,status="Watched")
+            new_movie = Movie(name=m_name, rating=float(m_rating),image_url=m_img,review=m_review,genre=m_genre, 
+                              user_id=user.id,status="Watched")
             db.session.add(new_movie)
             db.session.commit()
 
@@ -158,7 +159,7 @@ def wishlist():
     movies = Movie.query.filter_by(user_id=user.id, status='Wishlist').all()
     return render_template("wishlist.html",movies=movies,source="wishlist")
 
-## WIHLIST ADD
+## WISHLIST ADD
 @app.route("/wishlist/add",methods=["GET","POST"])
 def w_add():
     logged_in = check_logged_in_user()
@@ -171,13 +172,17 @@ def w_add():
             m_rating = request.form.get("m_rating")
             m_genre = request.form.get("m_genre")
             m_img = request.form.get("m_img")
-            new_movie = Movie(name=m_name, rating=float(m_rating),image_url=m_img,review=m_review,genre=m_genre, user_id=user.id,status="Wishlist")
+            new_movie = Movie(name=m_name, rating=float(m_rating),image_url=m_img,review=m_review,genre=m_genre, 
+                              user_id=user.id,status="Wishlist")
             db.session.add(new_movie)
             db.session.commit()
             return redirect(url_for('wishlist')) ##redirects After adding
         return render_template('add.html', movies=movies,source="wishlist")
     else:
         return redirect(url_for('login'))  # If not logged in, redirect to login page
+    
+    
+
 
 
 #DELETE FOR BOTH
