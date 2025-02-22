@@ -32,18 +32,10 @@ document.querySelectorAll(".movie-card").forEach(card => {
     deleteForm.action = `/delete_movie/${m_id}`;
 
     // Chnage wishlist to wtched
-    
     edit.action=`/edit/${m_id}`;
     console.log("Form action after setting:", edit.action); 
     completedForm.action = `/completed/${m_id}`;
-    
-
-     //set edit form action dynamically 
-
-     
-
-
-
+     //set edit form action dynamically
   });
 });
 

@@ -221,8 +221,6 @@ def edit(m_id):
 
     if logged_in:
         movie = Movie.query.get(m_id)
-        print(movie)
-        print(movie.name)
         if movie:
           if request.method == 'POST':
             movie.name = request.form.get("m_name")
