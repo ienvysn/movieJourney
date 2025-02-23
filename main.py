@@ -103,12 +103,8 @@ def home():
     if logged_in:
         return render_template("home.html")
     else:
-        return redirect(class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), nullable=False, unique=True)
-    password= db.Column(db.String(),nullable=False)
-    logged_in= db.Column(db.Boolean())
-    movies = db.relationship('Movie') #curl_for("login"))
+       return redirect(url_for('home'))
+    
 @app.route("/logout")
 def log_out():
         logged_in=check_logged_in_user()
@@ -247,3 +243,4 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
+# kjabkjs 
