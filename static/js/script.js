@@ -12,7 +12,6 @@
 document.querySelectorAll(".movie-card").forEach(card => {
   card.addEventListener("click", () => {
     // Get movie details from data attributes
-    console.log("Movie card clicked");
     const m_id = card.getAttribute("data-movie-id");
     const name = card.getAttribute("data-name");
     const review = card.getAttribute("data-review");
@@ -23,7 +22,6 @@ document.querySelectorAll(".movie-card").forEach(card => {
     modalDescription.textContent = review;
     modalrate.textContent= rate;
     modalgenre.textContent=genre;
-    console.log("Form action before setting:", edit.action);
 
     // Show modal
     modal.style.display = "flex";
@@ -33,7 +31,6 @@ document.querySelectorAll(".movie-card").forEach(card => {
 
     // Chnage wishlist to wtched
     edit.action=`/edit/${m_id}`;
-    console.log("Form action after setting:", edit.action); 
     completedForm.action = `/completed/${m_id}`;
      //set edit form action dynamically
   });

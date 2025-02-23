@@ -116,7 +116,6 @@ def log_out():
 ##WACTHED
 @app.route("/watched",methods=["GET","POST"])
 def watchlist():
-    print("tyest")
     logged_in = check_logged_in_user()
     if not logged_in:
         return redirect(url_for('login'))
