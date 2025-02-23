@@ -11,12 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movieJourney.db"
 db = SQLAlchemy(app)
 
 # User Model
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), nullable=False, unique=True)
-    password= db.Column(db.String(),nullable=False)
-    logged_in= db.Column(db.Boolean())
-    movies = db.relationship('Movie') #creates the relationship between movies and user. A singlew user acn have multiple movies
+reates the relationship between movies and user. A singlew user acn have multiple movies
 
 
 #Movie Model
@@ -102,7 +97,12 @@ def home():
     if logged_in:
         return render_template("home.html")
     else:
-        return redirect(url_for("login"))
+        return redirect(class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    password= db.Column(db.String(),nullable=False)
+    logged_in= db.Column(db.Boolean())
+    movies = db.relationship('Movie') #curl_for("login"))
 @app.route("/logout")
 def log_out():
         logged_in=check_logged_in_user()
@@ -239,3 +239,20 @@ def catch_all(unknown_path):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# User Model
+reates the relationship between movies and user. A singlew user acn have multiple movies
+
+
+#Movie Model
+class Movie(db.Model):
+    id= db.Column(db.Integer, primary_key= True)
+    name= db.Column(db.String(), nullable= False)
+    genre = db.Column(db.String(), nullable=False)
+    status = db.Column(db.String(), nullable=False)
+    rating = db.Column(db.Float)
+    review = db.Column(db.Text)
+    image_url = db.Column(db.String())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
