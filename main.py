@@ -11,7 +11,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movieJourney.db"
 db = SQLAlchemy(app)
 
 # User Model
-reates the relationship between movies and user. A singlew user acn have multiple movies
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    password= db.Column(db.String(),nullable=False)
+    logged_in= db.Column(db.Boolean())
+    movies = db.relationship('Movie') #creates the relationship between movies and user. A singlew user acn have multiple movies
+
 
 
 #Movie Model
