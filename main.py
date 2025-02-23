@@ -247,18 +247,3 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-# User Model
-reates the relationship between movies and user. A singlew user acn have multiple movies
-
-
-#Movie Model
-class Movie(db.Model):
-    id= db.Column(db.Integer, primary_key= True)
-    name= db.Column(db.String(), nullable= False)
-    genre = db.Column(db.String(), nullable=False)
-    status = db.Column(db.String(), nullable=False)
-    rating = db.Column(db.Float)
-    review = db.Column(db.Text)
-    image_url = db.Column(db.String())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
